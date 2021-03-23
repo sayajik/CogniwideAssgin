@@ -2,16 +2,17 @@ package com.sayaji.cogniwideassgin.viewmodel;
 
 import android.os.Handler;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 
-import androidx.databinding.BindingAdapter;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.sayaji.cogniwideassgin.commonutils.Action;
 import com.sayaji.cogniwideassgin.commonutils.AppConstants;
 import com.sayaji.cogniwideassgin.datamodel.LoginDataModel;
+import com.sayaji.cogniwideassgin.datamodel.Result;
+
+import java.util.List;
 
 public class LoginViewModel extends ViewModel {
     public MutableLiveData<String> errorPassword = new MutableLiveData<>();
@@ -21,6 +22,14 @@ public class LoginViewModel extends ViewModel {
     public MutableLiveData<String> password = new MutableLiveData<>();
 
     public boolean isLoginButtonEnable = false;
+
+    //Stores actions for view.
+    private MutableLiveData<Action> mAction = new MutableLiveData<>();
+
+    public LiveData<Action> getAction() {
+        return mAction;
+    }
+
 
     public LoginViewModel() {
 
@@ -35,7 +44,6 @@ public class LoginViewModel extends ViewModel {
         return userMutableLiveData;
     }
 
-
     public void onLoginClicked() {
         new Handler().postDelayed(new Runnable() {
             @Override
@@ -43,6 +51,7 @@ public class LoginViewModel extends ViewModel {
 
             }
         }, 3000);
+        showMovieListScreen();
     }
 
     public void onUsernameTextChanged(CharSequence text) {
@@ -65,4 +74,14 @@ public class LoginViewModel extends ViewModel {
         }
         userMutableLiveData.setValue(user);
     }
+
+    private void showLoginError() {
+        mAction.setValue(new Action(Action.SHOW_INVALID_PASSWARD_OR_LOGIN));
+    }
+
+
+    private void showMovieListScreen() {
+        mAction.setValue(new Action(Action.SHOW_MOVIE_LIST));
+    }
+
 }
